@@ -1,18 +1,20 @@
 ---
-author: Sat Naing
-pubDatetime: 2023-01-30T15:57:52.737Z
 title: AstroPaper 2.0
-slug: astro-paper-2
 featured: false
+pubDatetime: 2023-01-30T15:57:52.737Z
+modDatetime: 2025-04-11T16:42:00
+author: Sat Naing
+description: AstroPaper with the enhancements of Astro v2. Type-safe markdown
+  contents, bug fixes and better dev experience etc.
 ogImage: https://user-images.githubusercontent.com/53733092/215771435-25408246-2309-4f8b-a781-1f3d93bdf0ec.png
+slug: astro-paper-2
+series: versions
 tags:
   - release
-description: AstroPaper with the enhancements of Astro v2. Type-safe markdown contents, bug fixes and better dev experience etc.
 ---
-
 Astro 2.0 has been released with some cool features, breaking changes, DX improvements, better error overlay and so on. AstroPaper takes advantage of those cool features, especially Content Collections API.
 
-<!-- ![Introducing AstroPaper 2.0](https://user-images.githubusercontent.com/53733092/215683840-dc2502f5-8c5a-44f0-a26c-4e7180455056.png) -->
+<!-- !\[Introducing AstroPaper 2.0](https://user-images.githubusercontent.com/53733092/215683840-dc2502f5-8c5a-44f0-a26c-4e7180455056.png) -->
 
 ![Introducing AstroPaper 2.0](https://user-images.githubusercontent.com/53733092/215771435-25408246-2309-4f8b-a781-1f3d93bdf0ec.png)
 
@@ -81,11 +83,11 @@ AstroPaper 2.0 includes automatic class sorting with [TailwindCSS Prettier plugi
 
 ### Updated Docs & README
 
-All the [#docs](https://astro-paper.pages.dev/tags/docs/) blog posts and [README](https://github.com/satnaing/astro-paper#readme) are updated for this AstroPaper v2.
+All the [\#docs](https://astro-paper.pages.dev/tags/docs/) blog posts and [README](https://github.com/satnaing/astro-paper#readme) are updated for this AstroPaper v2.
 
 ## Bug Fixes
 
-- fix broken tags in the Blog Post page
-- in a tag page, the last part of the breadcrumb is now updated to lower-case for consistency
-- exclude draft posts in a tag page
-- fix 'onChange value not updating issue' after a page reload
+* fix broken tags in the Blog Post page
+* in a tag page, the last part of the breadcrumb is now updated to lower-case for consistency
+* exclude draft posts in a tag page
+* fix 'onChange value not updating issue' after a page reload
