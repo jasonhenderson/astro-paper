@@ -1,0 +1,87 @@
+# backend:
+#   name: git-gateway
+#   repo: jasonhenderson/astro-paper
+#   proxy_url: http://localhost:8081/api/v1
+#   branch: main # Branch to update (optional; defaults to master)
+backend:
+  name: github
+  branch: main # change this to your branch
+  repo: jasonhenderson/astro-paper # change this to your repo
+  site_domain: localhost # change this to your domain
+  base_url: http://localhost:4321/ # change this to your prod URL
+  auth_endpoint: oauth # the oauth route provided by the integration
+
+# local_backend: true # run npx netlify-cms-proxy-server for local testing
+
+publish_mode: editorial_workflow
+
+media_folder: "src/assets/images"
+public_folder: "/assets"
+
+collections:
+  - name: "posts"
+    label: "Blog Posts"
+    label_singular: "Blog Post"
+    folder: "src/data/blog"
+    path: "{{series}}/{{slug}}"
+    create: true
+    delete: true
+    fields:
+      - { name: "title", widget: "string", label: "Post Title" }
+      - {
+          name: "featured",
+          widget: "boolean",
+          label: "Featured",
+          default: false,
+        }
+      - {
+          name: "pubDatetime",
+          widget: "datetime",
+          date_format: "YYYY-MM-DD",
+          time_format: "hh:mm a",
+          format: "YYYY-MM-DDTHH:mm:ss",
+          label: "Date Published",
+        }
+      - {
+          name: "modDatetime",
+          widget: "datetime",
+          date_format: "YYYY-MM-DD",
+          time_format: "hh:mm a",
+          format: "YYYY-MM-DDTHH:mm:ss",
+          label: "Date Modified",
+        }
+      - {
+          name: "readingTime",
+          widget: "string",
+          label: "Reading Time",
+          required: false,
+        }
+      - {
+          name: "author",
+          widget: "string",
+          label: "Author Name",
+          required: false,
+        }
+      - {
+          name: "description",
+          widget: "string",
+          label: "Description",
+          required: false,
+        }
+      - { name: "ogImage", widget: "image", label: "Image", required: false }
+      - {
+          name: "slug",
+          widget: "string",
+          label: "Slug",
+          default: "{{slug}}",
+          required: false,
+        }
+      - {
+          name: "series",
+          widget: "string",
+          label: "Series",
+          default: "{{series}}",
+          required: false,
+        }
+      - { name: "tags", label: "Tags", widget: "list" }
+      - { name: "body", widget: "markdown", label: "Post Body" }
