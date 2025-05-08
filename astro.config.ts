@@ -5,17 +5,19 @@ import remarkToc from "remark-toc";
 import remarkCollapse from "remark-collapse";
 import { SITE } from "./src/config";
 
-import netlify from "@astrojs/netlify";
-
+import vercel from '@astrojs/vercel';
 import decapCmsOauth from "astro-decap-cms-oauth";
 
 // https://astro.build/config
 export default defineConfig({
   site: SITE.website,
 
-  integrations: [sitemap({
-    filter: page => SITE.showArchives || !page.endsWith("/archives"),
-  }), decapCmsOauth()],
+  integrations: [
+    sitemap({
+      filter: page => SITE.showArchives || !page.endsWith("/archives"),
+    }),
+    decapCmsOauth(),
+  ],
 
   // https://astro.build/en/reference/configuration-reference/#output
   // Use static, and in places where routing is needed for dynamic content, use the <a href="https://astro.build/en/core-concepts/routing/#dynamic-routes">dynamic routes</a> feature.
@@ -52,5 +54,9 @@ export default defineConfig({
     preserveScriptOrder: true,
   },
 
-  adapter: netlify(),
+  adapter: vercel({
+    webAnalytics: {
+      enabled: true,
+    },
+  }),
 });

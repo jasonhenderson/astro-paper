@@ -15,13 +15,13 @@
     "lint": "eslint ."
   },
   "dependencies": {
-    "@astrojs/netlify": "^6.2.5",
     "@astrojs/rss": "^4.0.11",
     "@astrojs/sitemap": "^3.2.1",
+    "@astrojs/vercel": "^8.1.4",
     "@resvg/resvg-js": "^2.6.2",
     "@tailwindcss/vite": "^4.0.14",
     "astro": "^5.5.2",
-    "astro-decap-cms-oauth": "^0.5.1",
+    "astro-decap-cms-oauth": "github:jasonhenderson/astro-decap-cms-oauth",
     "dayjs": "^1.11.13",
     "lodash.kebabcase": "^4.1.1",
     "remark-collapse": "^0.1.2",

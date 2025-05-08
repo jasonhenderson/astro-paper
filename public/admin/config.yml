@@ -4,14 +4,14 @@
 #   proxy_url: http://localhost:8081/api/v1
 #   branch: main # Branch to update (optional; defaults to master)
 backend:
-  name: github
+  name: git-gateway
   branch: main # change this to your branch
   repo: jasonhenderson/astro-paper # change this to your repo
   site_domain: localhost # change this to your domain
   base_url: http://localhost:4321/ # change this to your prod URL
   auth_endpoint: oauth # the oauth route provided by the integration
 
-# local_backend: true # run npx netlify-cms-proxy-server for local testing
+local_backend: true # run npx decap-server for local testing
 
 publish_mode: editorial_workflow
 
@@ -19,15 +19,123 @@ media_folder: "src/assets/images"
 public_folder: "/assets"
 
 collections:
+  - name: "authors"
+    label: "Blog Authors"
+    label_singular: "Blog Author"
+    folder: "src/data/authors"
+    path: "{{slug}}"
+    create: true
+    delete: true
+    fields:
+      - {
+          name: "title",
+          widget: "string",
+          label: "Display Name",
+          required: true,
+        }
+      - name: "name"
+        widget: "object"
+        label: "Name"
+        collapsed: false
+        required: true
+        fields:
+          - label: "First Name"
+            name: "firstName"
+            widget: "string"
+            default: ""
+            required: true
+          - label: "Last Name"
+            name: "lastName"
+            widget: "string"
+            default: ""
+            required: true
+      - { name: "id", widget: "string", label: "Author ID" }
+      - { name: "ogImage", widget: "image", label: "Image", required: false }
+      - {
+          name: "slug",
+          widget: "string",
+          label: "Slug",
+          default: "",
+          required: false,
+        }
+      - { name: "body", widget: "markdown", label: "About the Author" }
+  - name: "series"
+    label: "Blog Series"
+    label_singular: "Blog Series"
+    folder: "src/data/series"
+    path: "{{slug}}"
+    create: true
+    delete: true
+    fields:
+      - { name: "id", widget: "string", label: "Series ID" }
+      - { name: "title", widget: "string", label: "Series Title" }
+      - {
+          name: "description",
+          widget: "string",
+          label: "Description",
+          required: true,
+        }
+      - {
+          name: "featured",
+          widget: "boolean",
+          label: "Featured",
+          default: false,
+        }
+      - {
+          name: "startDatetime",
+          widget: "datetime",
+          date_format: "YYYY-MM-DD",
+          time_format: "hh:mm a",
+          format: "YYYY-MM-DDTHH:mm:ss",
+          label: "Date Started",
+          default: "{{now}}",
+          required: false,
+        }
+      - {
+          name: "endDatetime",
+          widget: "datetime",
+          date_format: "YYYY-MM-DD",
+          time_format: "hh:mm a",
+          format: "YYYY-MM-DDTHH:mm:ss",
+          label: "Date Concluded",
+          required: false,
+        }
+      - {
+          name: "readingTime",
+          widget: "string",
+          label: "Reading Time",
+          required: false,
+        }
+      - { name: "ogImage", widget: "image", label: "Image", required: false }
+      - {
+          name: "slug",
+          widget: "string",
+          label: "Slug",
+          default: "",
+          required: false,
+        }
+      - { name: "tags", label: "Tags", widget: "list" }
+      - { name: "body", widget: "markdown", label: "Post Body" }
   - name: "posts"
     label: "Blog Posts"
     label_singular: "Blog Post"
     folder: "src/data/blog"
-    path: "{{series}}/{{slug}}"
+    # path: "{{series}}/{{slug}}"
+    path: "{{seriesPath}}{{slug}}"
+    # nested:
+    #       depth: 3 # max depth to show in the collection tree
+    #       summary: '{{title}}' # optional summary for a tree node, defaults to the inferred title field    create: true
+    # meta: { path: { widget: string, label: 'Path', index_file: 'index' } }
     create: true
     delete: true
     fields:
       - { name: "title", widget: "string", label: "Post Title" }
+      - {
+          name: "description",
+          widget: "string",
+          label: "Description",
+          required: true,
+        }
       - {
           name: "featured",
           widget: "boolean",
@@ -56,32 +164,56 @@ collections:
           label: "Reading Time",
           required: false,
         }
-      - {
-          name: "author",
-          widget: "string",
-          label: "Author Name",
-          required: false,
-        }
-      - {
-          name: "description",
-          widget: "string",
-          label: "Description",
-          required: false,
-        }
+      # - {
+      #     name: "author",
+      #     widget: "string",
+      #     label: "Author Name",
+      #     required: false,
+      #   }
+      - name: "author"
+        widget: "relation"
+        collection: "authors"
+        search_fields: ["id", "title"]
+        value_field: "id"
+        display_fields: ["title"]
+        multiple: false
+        required: false
       - { name: "ogImage", widget: "image", label: "Image", required: false }
       - {
           name: "slug",
           widget: "string",
           label: "Slug",
-          default: "{{slug}}",
+          default: "",
           required: false,
         }
-      - {
-          name: "series",
-          widget: "string",
-          label: "Series",
-          default: "{{series}}",
-          required: false,
-        }
+      - name: "series"
+        widget: "object"
+        label: "Series"
+        collapsed: true
+        required: false
+        hint: "series should be same string in all articles in the series, or left blank if not in a series"
+        fields:
+          - label: "Relation"
+            name: "seriesRel"
+            widget: "relation"
+            collection: "series"
+            search_fields: ["id", "title"]
+            value_field: "id"
+            display_fields: ["title", "description"]
+            multiple: false
+            required: false
+          - name: "seriesOrder"
+            widget: "number"
+            value_type: "int"
+            label: "Number in Series"
+            hint: "leave blank if there is no series, or date ordering is desired"
+            default: ""
+            required: false
+          - name: "seriesPath"
+            widget: "string"
+            label: "Folder Path for Series"
+            hint: "leave blank if you don't want series articles in their own folder AND if needed, end with '/', e.g. 'special-series/'"
+            default: ""
+            required: false
       - { name: "tags", label: "Tags", widget: "list" }
       - { name: "body", widget: "markdown", label: "Post Body" }
